@@ -5,16 +5,19 @@ import gym_examples
 import neat 
 import visualize
 import parallel
+import copy
 
 import numpy as np
 
-# Hyper-parameters
-EVOLUTION_NUMBER = 20
-
+#==== Hyper-parameters ====================================================================
+NUM_EVOLUTIONS = 200
+NUM_EVAL_STEPS = 170
+NUM_CORES = 8
+#==========================================================================================
 
 
 env = gym.make('gym_examples/a1-v1', 
-               render_mode="human"
+            #    render_mode="human"
                )
 env.reset()
 
@@ -27,26 +30,38 @@ def eval_func(x):
     for genome_id, genome in genomes:
         genome.fitness = 0 # initialize fitnes 
         net = neat.nn.FeedForwardNetwork.create(genome, config)    
-        default_action = np.array([0, 0.9, -1.8, 0, 0.9, -1.8, 0, 0.9, -1.8, 0, 0.,9 -1.8])
+        default_action = np.array([ 0, -0.25622471, 0.0072058, 
+                                    0, -0.25622471, 0.0072058, 
+                                    0, -0.25622471, 0.0072058, 
+                                    0, -0.25622471, 0.0072058])        
         new_action = default_action
         env.reset()
 
-        for _ in range(500):
+        for _ in range(30):
+            env.step([0, -0.25622471, 0.0072058, 
+                      0, -0.25622471, 0.0072058, 
+                      0, -0.25622471, 0.0072058, 
+                      0, -0.25622471, 0.0072058])
+
+        for _ in range(NUM_EVAL_STEPS):
             observation, reward, terminated, truncated, info = env.step(new_action)
             genome.fitness += reward
             output = net.activate(observation)
-            new_action = output
+            new_action = output 
+            # print("reward:", reward)
 
             if terminated or truncated:
                 env.reset()
+                # print('genome_id:', genome_id, 'genome_fitness:', genome.fitness)
                 break
-    
+        
+
     env.close()
 
 
 
 def eval_genomes(genomes, config):
-    paraEval = parallel.ParallelEvaluator(8, eval_func)
+    paraEval = parallel.ParallelEvaluator(NUM_CORES, eval_func)
     paraEval.eval_function((genomes, config))
 
 
@@ -56,20 +71,32 @@ def best_demo(genome, config):
         demonstrate best performing genome.
     '''
     env = gym.make('gym_examples/a1-v1', render_mode="human")
-    env.reset()
     net = neat.nn.FeedForwardNetwork.create(genome, config)
-    default_action = np.array([0, 0.9, -1.8, 0, 0.9, -1.8, 0, 0.9, -1.8, 0, 0.,9 -1.8])
+    default_action = np.array([ 0, -0.25622471, 0.0072058, 
+                                0, -0.25622471, 0.0072058, 
+                                0, -0.25622471, 0.0072058, 
+                                0, -0.25622471, 0.0072058])    
     new_action = default_action
+    env.reset()
    
-    for _ in range(500):
-        observation, reward, terminated, truncated, info = env.step(new_action)
-        output = net.activate(observation) 
-        new_action = output
-        genome.fitness += reward
-        print("step", _, " fitness:" , genome.fitness)
-   
-    env.close()
+    for _ in range(30):
+        env.step([0, -0.25622471, 0.0072058, 
+                    0, -0.25622471, 0.0072058, 
+                    0, -0.25622471, 0.0072058, 
+                    0, -0.25622471, 0.0072058])
 
+    for _ in range(NUM_EVAL_STEPS):
+        observation, reward, terminated, truncated, info = env.step(new_action)
+        genome.fitness += reward
+        output = net.activate(observation)
+        new_action = output 
+        # print("new_action:", new_action)
+
+        if terminated or truncated:
+            env.reset()
+            break
+
+    env.close()
 
 
 def run(config_file):
@@ -90,7 +117,7 @@ def run(config_file):
     p.add_reporter(stats)
     p.add_reporter(neat.Checkpointer(5))
 
-    winner = p.run(eval_genomes, EVOLUTION_NUMBER)
+    winner = p.run(eval_genomes, NUM_EVOLUTIONS)
 
     best_demo(winner, config)
 
