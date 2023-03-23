@@ -123,7 +123,7 @@ def run(config_file):
 
 if __name__ == '__main__':
     local_dir = os.path.dirname("__file__")
-    config_path = os.path.join(local_dir, 'config-neat.txt')
+    config_path = os.path.join(local_dir, 'neat_configs/A1-config.txt')
     observation, info = env.reset()    
     run(config_path)
     env.close()
