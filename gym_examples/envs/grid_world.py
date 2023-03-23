@@ -110,7 +110,10 @@ class A1Env(MujocoEnv, utils.EzPickle):
 
 
     def control_cost(self, action):
-        """ Penalize the large action value """
+        """ 
+            Penalize the large action input by comparing the current action
+            with the previous action. 
+        """
         action = self.prev_action - action   
         control_cost = self._ctrl_cost_weight * np.sum(np.square(action))
         return control_cost
@@ -131,7 +134,10 @@ class A1Env(MujocoEnv, utils.EzPickle):
 
 
     def step(self, action):
-        
+        """
+            action values are interpolated to the corresponding joint ranges.
+            the robot is actuated and reward is calculated and returned.
+        """
         action_cp = action.copy()
 
         # Covert the activation output range[-1, 1] to range for each actuator
@@ -175,7 +181,12 @@ class A1Env(MujocoEnv, utils.EzPickle):
 
 
     def _get_obs(self):
-        """ return observations (qpos + qvel) """
+        """ 
+            returns the relative position and velocity of the
+            joints as observation values.
+
+            return observations (qpos + qvel) 
+        """
         position = self.data.qpos.flat.copy()
         velocity = self.data.qvel.flat.copy()
 
@@ -187,7 +198,9 @@ class A1Env(MujocoEnv, utils.EzPickle):
 
 
     def reset_model(self):
-        """ resetting the environment """
+        """ 
+            resetting the environment 
+        """
         noise_low = -self._reset_noise_scale
         noise_high = self._reset_noise_scale
 
