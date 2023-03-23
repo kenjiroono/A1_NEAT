@@ -17,7 +17,20 @@ To run the evolution for robotic control task:
 ```
 python3 main.py
 ```
-To reconstruct/resume the evolution:
+To reconstruct / resume the evolution:
 ```
 python3 checkpoint_vis.py PATH_TO_GENOME PATH_TO_CONFIG
+```
+## Cite
+```
+@software{menagerie2022github,
+  author = {MuJoCo Menagerie Contributors},
+  title = {{MuJoCo Menagerie: A collection of high-quality simulation models for MuJoCo}},
+  url = {http://github.com/deepmind/mujoco_menagerie},
+  year = {2022},
+}
+```
+
+```
+McIntyre, A., Kallada, M., Miguel, C. G., Feher de Silva, C., & Netto, M. L. neat-python [Computer software]
 ```
