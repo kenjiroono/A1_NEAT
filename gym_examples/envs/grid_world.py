@@ -12,6 +12,15 @@ DEFAULT_CAMERA_CONFIG = {
 
 class A1Env(MujocoEnv, utils.EzPickle):
     """
+    ### Description
+    The xml file for Unutree A1 is aquired from following source which is under BSD 3-Clause License.
+
+    @software{menagerie2022github,
+        author = {MuJoCo Menagerie Contributors},
+        title = {{MuJoCo Menagerie: A collection of high-quality simulation models for MuJoCo}},
+        url = {http://github.com/deepmind/mujoco_menagerie},
+        year = {2022},
+
     ### Action Space
     The action space is a `Box(-1, 1, (12,), float32)`. The A1 robot consists of 12 actuators:   
     | Num | Action                                  | Control Min | Control Max | Name (in corresponding XML file) | 
@@ -45,6 +54,7 @@ class A1Env(MujocoEnv, utils.EzPickle):
         measured as *`ctrl_cost_weight` * sum(action<sup>2</sup>)* where *`ctrl_cost_weight`* is 
         a parameter set for thecontrol. The total reward returned is ***reward*** 
         *=* *forward_reward - ctrl_cost* and `info` will also contain the individual reward terms
+
     """
 
     metadata = {"render_modes": ["human", "rgb_array", "depth_array"], "render_fps": 20}
@@ -202,3 +212,12 @@ class A1Env(MujocoEnv, utils.EzPickle):
                 getattr(self.viewer.cam, key)[:] = value
             else:
                 setattr(self.viewer.cam, key, value)
+
+"""    
+@software{menagerie2022github,
+  author = {MuJoCo Menagerie Contributors},
+  title = {{MuJoCo Menagerie: A collection of high-quality simulation models for MuJoCo}},
+  url = {http://github.com/deepmind/mujoco_menagerie},
+  year = {2022},
+}
+"""
