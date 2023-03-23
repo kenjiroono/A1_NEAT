@@ -6,4 +6,8 @@ This project uses [Python-NEAT](https://github.com/CodeReclaimers/neat-python) t
 
 ![alt text](gym_examples/envs/assets/a1.png)
 
-## 
+## Running the evolution
+To run the evolution for cart-pole-balancing task:
+```
+python3 cart-pole.py
+```
