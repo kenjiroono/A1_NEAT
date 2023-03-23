@@ -11,3 +11,7 @@ To run the evolution for cart-pole-balancing task:
 ```
 python3 cart-pole.py
 ```
+To run the evolution for robotic control task:
+```
+python3 main.py
+```
